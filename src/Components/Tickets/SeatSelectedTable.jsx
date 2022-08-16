@@ -27,13 +27,8 @@ const SeatSelectedTable = ({ selectedSeats, onLoading }) => {
     dispatch(removeAllSeatReducer());
   };
 
-  // const bookAllHandler = (selectedSeats) => {
-  //   dispatch(updateAllBookingTicket(selectedSeats));
-  // };
-
   const bookTicketHandler = (seat) => {
     onLoading(seat.name);
-    console.log(updateBookingTicket({ seat, type: 'book' }));
     dispatch(updateBookingTicket({ seat, type: 'book' }));
     dispatch(selectSeatReducer(seat));
   };
@@ -118,7 +113,9 @@ const SeatSelectedTable = ({ selectedSeats, onLoading }) => {
         </Grid.Col>
         <Grid.Col sm={4}>
           <Group position='right'>
-            <Button>Book all</Button>
+            {/* <Button onClick={() => bookAllHandler(selectedSeats)}>
+              Book all
+            </Button> */}
             <Button onClick={removeAllSeatHandler} variant='light' color='red'>
               Remove all
             </Button>

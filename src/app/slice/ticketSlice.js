@@ -5,7 +5,7 @@ export const URL = 'https://62f71205ab9f1f8e89f8052a.mockapi.io/movie-tickets';
 
 const initialState = {
   tickets: [],
-  selectedSeats: [],
+  selectedSeats: JSON.parse(localStorage.getItem('seats')) || [],
   isLoading: false,
   error: null,
 };
@@ -60,57 +60,32 @@ export const updateBookingTicket = createAsyncThunk(
   }
 );
 
-// export const updateAllBookingTicket = createAsyncThunk(
-//   'ticket/updateAllTicket',
-//   async (payload, { getState, dispatch, rejectWithValue }) => {
-//     try {
-//       const { tickets } = getState().tickets;
-//       const payloadPromises = payload.map((item) => {
-//         const row = item.name.slice(0, 1);
-//         const foundedRow = tickets.find((item) => item.row === row);
-//         const { seats } = foundedRow;
-//         const updatedSeats = seats.map((seat) => {
-//           return seat.name === item.name ? { ...seat, booked: true } : seat;
-//         });
-//         const updatedRow = {
-//           ...foundedRow,
-//           seats: updatedSeats,
-//         };
-//         return new Promise((resolve, reject) => {
-//           axios.put(`${URL}/${foundedRow.id}`, updatedRow);
-//         });
-//       });
-
-//       Promise.all(payloadPromises).then((results) => {
-//         results();
-//       });
-//     } catch (error) {
-//       throw rejectWithValue(error.response.data);
-//     }
-//   }
-// );
-
 const selectSeatHandler = (state, { payload }) => {
   const { selectedSeats } = state;
   const isSeatExisted = selectedSeats.some(
     (item) => item.name === payload.name
   );
   if (isSeatExisted) {
+    const updatedSeats = [
+      ...selectedSeats.filter((seat) => seat.name !== payload.name),
+    ];
+    localStorage.setItem('seats', JSON.stringify(updatedSeats));
     return {
       ...state,
-      selectedSeats: [
-        ...selectedSeats.filter((seat) => seat.name !== payload.name),
-      ],
+      selectedSeats: updatedSeats,
     };
   } else {
+    const updatedSeats = [...selectedSeats, payload];
+    localStorage.setItem('seats', JSON.stringify(updatedSeats));
     return {
       ...state,
-      selectedSeats: [...selectedSeats, payload],
+      selectedSeats: updatedSeats,
     };
   }
 };
 
 const removeAllSeatHandler = (state, action) => {
+  localStorage.removeItem('seats');
   state.selectedSeats = [];
 };
 
