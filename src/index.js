@@ -2,22 +2,39 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+import { MantineProvider } from '@mantine/core';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: 'dark',
+        colors: {
+          dark: [
+            '#d5d7e0',
+            '#acaebf',
+            '#8c8fa3',
+            '#666980',
+            '#4d4f66',
+            '#34354a',
+            '#2b2c3d',
+            '#1d1e30',
+            '#0c0d21',
+            '#01010a',
+          ],
+        },
+      }}
+    >
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </MantineProvider>
+  </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
